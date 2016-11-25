@@ -373,7 +373,7 @@ Delegator.prototype.fire = function (type, detail, options) {
         cancelable: cancelable,
       });
 
-      // TODO check if without this works on every browsers
+      // XXX check if without this works on every browsers
       // evt = document.createEvent('HTMLEvents');
       // evt.initEvent(type, true, false);
       break;
