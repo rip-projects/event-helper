@@ -371,6 +371,8 @@ Delegator.prototype.fire = function (type, detail, options) {
       evt = new window.Event(type, {
         bubbles: bubbles,
         cancelable: cancelable,
+        // XXX is it ok to have detail here?
+        detail: detail,
       });
 
       // XXX check if without this works on every browsers
