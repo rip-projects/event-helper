@@ -5,8 +5,8 @@ let _handlers = {};
 let _delegatorInstances = {};
 
 function _addEvent (delegator, type, callback) {
-    // blur and focus do not bubble up but if you use event capturing
-    // then you will get them
+  // blur and focus do not bubble up but if you use event capturing
+  // then you will get them
   let useCapture = type === 'blur' || type === 'focus';
   delegator.element.addEventListener(type, callback, useCapture);
 }
@@ -52,8 +52,8 @@ function _getMatcher (element) {
     return _matcher;
   }
 
-    // if it doesn't match a native browser method
-    // fall back to the delegator function
+  // if it doesn't match a native browser method
+  // fall back to the delegator function
   _matcher = Delegator.matchesSelector;
   return _matcher;
 }
@@ -67,27 +67,26 @@ function _getMatcher (element) {
  * @returns {void|Node}
  */
 function _matchesSelector (element, selector, boundElement) {
-    // no selector means this event was bound directly to this element
+  // no selector means this event was bound directly to this element
   if (selector === '_root') {
     return boundElement;
   }
 
-    // if we have moved up to the element you bound the event to
-    // then we have come too far
+  // if we have moved up to the element you bound the event to
+  // then we have come too far
   if (element === boundElement) {
     return;
   }
 
-    // if this is a match then we are done!
   if (_getMatcher(element).call(element, selector)) {
     return element;
   }
 
-    // if this element did not match but has a parent we should try
-    // going up the tree to see if any of the parent elements match
-    // for example if you are looking for a click on an <a> tag but there
-    // is a <span> inside of the a tag that it is the target,
-    // it should still work
+  // if this element did not match but has a parent we should try
+  // going up the tree to see if any of the parent elements match
+  // for example if you are looking for a click on an <a> tag but there
+  // is a <span> inside of the a tag that it is the target,
+  // it should still work
   if (element.parentNode) {
     _level++;
     return _matchesSelector(element.parentNode, selector, boundElement);
@@ -111,14 +110,14 @@ function _addHandler (delegator, event, selector, callback) {
 }
 
 function _removeHandler (delegator, event, selector, callback) {
-    // if there are no events tied to this element at all
-    // then don't do anything
+  // if there are no events tied to this element at all
+  // then don't do anything
   if (!_handlers[delegator.id]) {
     return;
   }
 
-    // if there is no event type specified then remove all events
-    // example: Delegator(element).off()
+  // if there is no event type specified then remove all events
+  // example: Delegator(element).off()
   if (!event) {
     for (let type in _handlers[delegator.id]) {
       if (_handlers[delegator.id].hasOwnProperty(type)) {
@@ -128,24 +127,24 @@ function _removeHandler (delegator, event, selector, callback) {
     return;
   }
 
-    // if no callback or selector is specified remove all events of this type
-    // example: Delegator(element).off('click')
+  // if no callback or selector is specified remove all events of this type
+  // example: Delegator(element).off('click')
   if (!callback && !selector) {
     _handlers[delegator.id][event] = {};
     return;
   }
 
-    // if a selector is specified but no callback remove all events
-    // for this selector
-    // example: Delegator(element).off('click', '.sub-element')
+  // if a selector is specified but no callback remove all events
+  // for this selector
+  // example: Delegator(element).off('click', '.sub-element')
   if (!callback) {
     delete _handlers[delegator.id][event][selector];
     return;
   }
 
-    // if we have specified an event type, selector, and callback then we
-    // need to make sure there are callbacks tied to this selector to
-    // begin with.  if there aren't then we can stop here
+  // if we have specified an event type, selector, and callback then we
+  // need to make sure there are callbacks tied to this selector to
+  // begin with.  if there aren't then we can stop here
   if (!_handlers[delegator.id][event][selector]) {
     return;
   }
@@ -172,7 +171,7 @@ function _handleEvent (id, e, type) {
   let i = 0;
   let j = 0;
 
-    // find all events that match
+  // find all events that match
   _level = 0;
   for (selector in _handlers[id][type]) {
     if (_handlers[id][type].hasOwnProperty(selector)) {
@@ -186,8 +185,8 @@ function _handleEvent (id, e, type) {
     }
   }
 
-    // stopPropagation() fails to set cancelBubble to true in Webkit
-    // @see http://code.google.com/p/chromium/issues/detail?id=162270
+  // stopPropagation() fails to set cancelBubble to true in Webkit
+  // @see http://code.google.com/p/chromium/issues/detail?id=162270
   e.stopPropagation = function () {
     e.cancelBubble = true;
   };
@@ -256,8 +255,8 @@ function _aliases (name) {
  * @returns {Object}
  */
 function _bind (events, selector, callback, remove) {
-    // fail silently if you pass null or undefined as an alement
-    // in the Delegator constructor
+  // fail silently if you pass null or undefined as an alement
+  // in the Delegator constructor
   if (!this.element) {
     return;
   }
@@ -271,7 +270,7 @@ function _bind (events, selector, callback, remove) {
     selector = '_root';
   }
 
-  if (selector instanceof window.HTMLElement) {
+  if (selector instanceof window.Element) {
     let id;
     if (selector.hasAttribute('bind-event-id')) {
       id = selector.getAttribute('bind-event-id');
